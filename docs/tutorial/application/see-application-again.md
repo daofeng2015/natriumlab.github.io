@@ -15,7 +15,7 @@
 :::
 
 ## 消息处理
-目前, 我们支持两种消息类型的发送, 即 `FriendMessage` 和 `GroupMessage`.  
+目前, 我们支持两种消息类型的发送, 即 `FriendMessage`(群消息) 和 `GroupMessage`(好友消息).  
 
 ### 发送群消息
 **Coroutine** `Mirai.sendGroupMessage`
@@ -41,8 +41,8 @@
  - 样例:
     ``` python
     await app.sendGroupMessage(
-        123456789,
-        [Plain(text="发送了一条群消息")]
+        123456789,  #群号
+        [Plain(text="发送了一条群消息")] #发送内容
     )
     ```
 
@@ -68,8 +68,8 @@
  - 样例:
     ``` python
     await app.sendFriendMessage(
-        123456789
-        [Plain(text="这是一条好友消息")]
+        123456789 #好友qq号
+        [Plain(text="这是一条好友消息")] #发送消息
     )
     ```
 
@@ -86,7 +86,12 @@
    - `EnvironmentError`: 检查检查实例化 `Mirai` 时填入的信息
    - `ConnectionRefusedError`: 你可以尝试重启应用
    - `RuntimeError`: 序列化失败, 尝试联系开发者
-
+- 样例:
+    ``` python
+    await app.revokeMessage(
+        source
+    )
+    ```
 ## 信息获取
 ### 获取机器人账号加入的群组
 **Coroutine** `Mirai.groupList`
@@ -95,7 +100,11 @@
  这是一个 `Dict[int, Group]`, 妥善使用.
  - 参数列表: 不需要传入参数
  - 返回值: `List[Group]`
-
+- 样例:
+    ``` python
+    await app.groupList(
+    )
+    ```
 ### 获取机器人账号所拥有的好友
 **Coroutine** `Mirai.friendList`
  - **警告**: 若你在实例化 `Mirai` 时未显式传入参数 `cache_friends` 的值,
@@ -103,55 +112,95 @@
  这是一个 `Dict[int, Friend]`, 妥善使用.
  - 参数列表: 不需要传入参数
  - 返回值: `List[Friend]`
-
+- 样例:
+    ``` python
+    await app.friendList(
+    )
+    ```
 ### 获取特定群组的成员列表
 **Coroutine** `Mirai.memberList`
  - 参数列表:
     - `target: int`: 群组的群号
  - 返回值: `List[Member]`
-
+- 样例:
+    ``` python
+    await app.memberList(
+        target = 123456 #群号
+    )
+    ```
 ### 获取特定群组的成员数量
 **Coroutine** `Mirai.groupMemberNumber`
  - 参数列表:
     - `target: int`: 群组的群号
  - 返回值: `int`
-
+- 样例:
+    ``` python
+    await app.groupMemberNumber(
+        target = 123456 #群号
+    )
+    ```
 ### 从已缓存的群组列表中获取 Group 对象
 `Mirai.getGroup`
  - 参数列表:
     - `target: int`: 群组的群号
  - 返回值: `Optional[Group]`
-
+- 样例:
+    ``` python
+    await app.getGroup(
+        target = 123456 #群号
+    )
+    ```
 ### 从已缓存的好友列表中获取 Friend 对象
 `Mirai.getFriend`
  - 参数列表:
     - `target: int`: 好友的QQ号
  - 返回值: `Optional[Friend]`
-
+- 样例:
+    ``` python
+    await app.getFriend(
+        target = 123
+    )
+    ```
 ### 缓存群组列表
 **Coroutine** `Mirai.cacheBotGroups`
  - 描述: 若在实例化时没有设置缓存, 则从无头客户端处拉取群组列表
  - 参数列表: 不需要传入参数
  - 返回值: 无返回值
-
+- 样例:
+    ``` python
+    await app.cacheBotGroups(
+    )
+    ```
 ### 缓存好友列表
 **Coroutine** `Mirai.cacheBotFriends`
  - 描述: 若在实例化时没有设置缓存, 则从无头客户端处拉取好友列表
  - 参数列表: 不需要传入参数
  - 返回值: 无返回值
-
+- 样例:
+    ``` python
+    await app.cacheBotFriends(
+    )
+    ```
 ### 强制刷新群组列表缓存
 **Coroutine** `Mirai.refreshBotGroupsCache`
  - 描述: 强制刷新群组列表, 无论是否已经缓存
  - 参数列表: 不需要传入参数
  - 返回值: `List[Group]`
-
+- 样例:
+    ``` python
+    await app.refreshBotGroupsCache(
+    )
+    ```
 ### 强制刷新好友列表缓存
 **Coroutine** `Mirai.refreshBotFriendsCache`
  - 描述: 强制刷新好友列表, 无论是否已经缓存
  - 参数列表: 不需要传入参数
  - 返回值: `List[Friend]`
-
+- 样例:
+    ``` python
+    await app.refreshBotFriendsCache(
+    )
+    ```
 ## 群管理
 ::: warning
 此部分的绝大多数内容需要机器人账号具有管理员甚至群主级的权限,
@@ -168,7 +217,12 @@
  - 权限限制:
     - 管理员(`Permission.Administrator`)
     - 群主(`Permission.Owner`)
-
+- 样例:
+    ``` python
+    await app.muteAll(
+       target = 123456 #群号
+    )
+    ```
 ### 取消全体禁言
 **Coroutine** `Mirai.unmuteAll`
  - 描述: 在指定群组处启用全体禁言
@@ -178,7 +232,12 @@
  - 权限限制:
     - 管理员(`Permission.Administrator`)
     - 群主(`Permission.Owner`)
-
+- 样例:
+    ``` python
+    await app.unmuteAll(
+        target = 123456 #群号
+    )
+    ```
 ### 获取群员信息
 **Coroutine** `Mirai.memberInfo`
  - 描述: 获取指定群组内指定群员的信息
@@ -187,7 +246,13 @@
     - `member: Union[Member, int]`: 指定群员
  - 返回值: `MemberChangeableSetting`
  - 权限限制: 无
-
+- 样例:
+    ``` python
+    await app.memberInfo(
+        group = 123， #群号
+        member = 1234 #群内群员qq
+    )
+    ```
 ### 修改群员信息
 **Coroutine** `Mirai.changeMemberInfo`
  - 描述: 修改群成员的信息(特殊头衔, 群名片)
@@ -202,21 +267,38 @@
     - 修改自身: 仅能更改群名片
  - 温馨提示: 因为 pydantic 无法不将值为 `null` 的键忽略,
  所以请先使用获取群员信息的接口, 并通过 `MemberChangeableSetting.modify` 更改其属性再提交.
-
+- 样例:
+    ``` python
+    await app.sendGroupMessage(
+        group = 123， #群号
+        member = 1234， #成员qq号
+        info = MemberChangeableSetting
+    )
+    ```
 ### 获取机器人的群成员信息
 **Coroutine** `Mirai.botMemberInfo`
  - 描述: 获取机器人账号在目标群的成员信息
  - 参数列表:
     - `group: Union[Group, int]`: 目标群组
  - 返回值: `MemberChangeableSetting`
-
+- 样例:
+    ``` python
+    await app.botMemberInfo(
+        group = 123#群号
+    )
+    ```
 ### 获取群设置
 **Coroutine** `Mirai.groupConfig`
  - 描述: 获取指定群的设置
  - 参数列表:
     - `group: Union[Group, int]`: 目标群组
  - 返回值: `GroupSetting`
-
+- 样例:
+    ``` python
+    await app.sendGroupMessage(
+        group = 123#群号
+    )
+    ```
 ### 修改群设置
 **Coroutine** `Mirai.changeGroupConfig`
  - 描述: 修改群成员的信息(特殊头衔, 群名片)
@@ -229,7 +311,13 @@
     - 群主(`Permission.Owner`)
  - 温馨提示: 因为 pydantic 无法不将值为 `null` 的键忽略,
  所以请先使用获取群设置的接口, 并通过 `GroupSetting.modify` 更改其属性再提交.
-
+- 样例:
+    ``` python
+    await app.sendGroupMessage(
+        group = 123,
+        config =  GroupSetting #要加以修改的设置
+    )
+    ```
 ### 禁言群成员
 **Coroutine** `Mirai.mute`
  - 描述: 禁言群成员
@@ -247,7 +335,14 @@
       若其直接表现值大于 30 天, 将只会禁言该成员 30 天,  
       若其直接表现值小于 1 分钟, 将只会禁言该成员 1 分钟.
     - 由于客观原因, 导致管理员**无法禁言**群主及其他管理员, 此时会抛出 `PermissionError`, 请注意.
-
+- 样例:
+    ``` python
+    await app.sendGroupMessage(
+        group = 123, #目标群组
+        member = 1234, #目标成员
+        time = 12 #禁言时长(分钟)
+    )
+    ```
 ### 取消禁言
 **Coroutine** `Mirai.unmute`
  - 描述: 取消之前对指定群成员的禁言
@@ -260,7 +355,13 @@
     - 群主(`Permission.Owner`)
  - 温馨提示:
     - 由于客观原因, 导致管理员**无法解禁**由群主禁言的管理员或是自己, 此时会抛出 `PermissionError`, 请注意.
-
+- 样例:
+    ``` python
+    await app.unmute(
+        group = 123, #目标群组
+        member = 12345 #目标成员
+    )
+    ```
 ### 将成员从群组中删除
 **Coroutine** `Mirai.kick`
  - 描述: 将指定群成员从群组中删除
@@ -273,3 +374,10 @@
     - 群主(`Permission.Owner`)
  - 温馨提示:
     - 由于客观原因, 导致管理员**无法踢出**其他管理员及群主, 此时会抛出 `PermissionError`, 请注意.
+- 样例:
+    ``` python
+    await app.kick(
+        group = 123, #目标群组
+        member = 12345 #目标成员
+    )
+    ```

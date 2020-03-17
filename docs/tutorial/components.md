@@ -24,7 +24,7 @@ await app.sendGroupMessage(
 [Plain(text="Hello, "), Plain(text="world"), Plain(text="!")]
 ```
 
-若此时, 我们也如之前一样发出任意私聊消息时:
+若此时, 我们也如之前一样发出任意群聊消息时:
 
 <panel-view title="聊天记录">
 <chat-message nickname="Alice" color="#cc0066">随便打个招呼吧.</chat-message>
